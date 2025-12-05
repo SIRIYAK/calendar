@@ -6,13 +6,11 @@ import { Sidebar } from './components/Sidebar';
 import { MonthView } from './components/MonthView';
 import { DayView } from './components/DayView';
 import { TimesheetView } from './components/TimesheetView';
-import { generateSmartSchedule } from './services/geminiService';
 
 const App: React.FC = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [view, setView] = useState<ViewType>(ViewType.MONTH);
   const [events, setEvents] = useState<CalendarEvent[]>([]);
-  const [isGenerating, setIsGenerating] = useState(false);
 
   // Load some demo events initially if empty
   useEffect(() => {
@@ -81,28 +79,6 @@ const App: React.FC = () => {
     setEvents([...events, newEvent]);
   };
 
-  const handleAutoSchedule = async () => {
-    if (isGenerating) return;
-    setIsGenerating(true);
-    
-    try {
-      // Pass a random selection of 5 tasks to the AI
-      const tasksToSchedule = MOCK_TASKS.sort(() => 0.5 - Math.random()).slice(0, 5);
-      
-      const aiEvents = await generateSmartSchedule(tasksToSchedule, currentDate);
-      
-      setEvents(prev => [...prev, ...aiEvents]);
-      setView(ViewType.DAY); // Switch to day view to see result
-      alert(`Scheduled ${aiEvents.length} tasks successfully!`);
-      
-    } catch (error) {
-      console.error(error);
-      alert('Failed to generate schedule. Check console or API Key.');
-    } finally {
-      setIsGenerating(false);
-    }
-  };
-
   const renderContent = () => {
     switch(view) {
       case ViewType.MONTH:
@@ -122,8 +98,6 @@ const App: React.FC = () => {
       <Sidebar 
         tasks={MOCK_TASKS} 
         onTaskDragStart={handleTaskDragStart} 
-        onAutoSchedule={handleAutoSchedule}
-        isGenerating={isGenerating}
       />
 
       {/* Main Content */}
