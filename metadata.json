@@ -1,5 +1,5 @@
 {
   "name": "ProjectFlow Calendar",
-  "description": "A professional project management calendar supporting monthly and hourly views. Features a task backlog extracted from project documentation.",
+  "description": "A professional project management calendar supporting monthly and hourly views. Features a task backlog extracted from project documentation and AI-powered auto-scheduling.",
   "requestFramePermissions": []
 }
